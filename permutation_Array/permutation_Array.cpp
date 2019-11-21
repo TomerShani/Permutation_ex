@@ -48,18 +48,48 @@ void setPath(int num, int* base, const int* arr)
 	base[count] = arr[index];
 }
 
+void printPath(int num, int** map, const int* permArr, int length)
+{
+	for (int j = 0; j < lengthOfPath(num, permArr); ++j)
+	{
+		std::cout << map[num][j] << " ";
+	}
+}
+
 // print function for debugging and inspecting
 void printMap(int** map, const int* permArr, int length)
 {
 	for (int i = 0; i < length; ++i)
 	{
 		std::cout << "Path of " << i << ": ";
-		for (int j = 0; j < lengthOfPath(i, permArr); ++j)
-		{
-			std::cout << map[i][j] << " ";
-		}
+//		for (int j = 0; j < lengthOfPath(i, permArr); ++j)
+//		{
+//			std::cout << map[i][j] << " ";
+//		}
+		printPath(i, map, permArr, length);
 		std::cout << '\n';
 	}
+}
+
+int getNumToFind()
+{
+	std::cout << "please enter a number to find: ";
+	int num{};
+	std::cin >> num;
+	if (std::cin.fail())
+	{
+		return -2; // errorcode - free all and exit!
+	}
+	return num;
+}
+
+void freeMap(int** map, int length)
+{
+	for (int i = 0; i < length; ++i)
+	{
+		delete[] map[i];
+	}
+	delete[] map;
 }
 
 int main()
@@ -85,12 +115,28 @@ int main()
 		map[i] = new int[lengthOfPath(0, permutationArray)];
 		setPath(i, map[i], permutationArray);
 	}
-	printMap(map, permutationArray, arraySize);
-
-	//get number to check
-	//print path to number
-	//special cases:
-		//if -1 print all paths and exit
-		//if anything else print error and exit
-
+	while (true)
+	{
+		//get number to check
+		int numCheck = getNumToFind();
+		//print path to number
+		if (numCheck <= -2 || numCheck >= arraySize)
+		{
+			std::cerr << "Error";
+			freeMap(map, arraySize);
+			delete[] permutationArray;
+			exit(EXIT_FAILURE);
+		}
+		if (numCheck == -1)
+		{
+			//print -1 result, free all and exit
+			std::cout << "should print the -1 thing";
+			freeMap(map, arraySize);
+			delete[] permutationArray;
+			exit(EXIT_SUCCESS);
+		}
+		std::cout << "path to " << numCheck <<" is: ";
+		printPath(numCheck, map, permutationArray, arraySize);
+		std::cout << '\n';
+	}
 }
