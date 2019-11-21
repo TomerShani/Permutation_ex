@@ -118,29 +118,57 @@ void freeMap(int** map, int length)
 	delete[] map;
 }
 
+int getNumOfPaths(const int* permArr, int length)
+{
+	double sum = 0.0;
+	for (int i = 0; i < length; ++i)
+	{
+		sum += 1.0 / lengthOfPath(i, permArr);
+	}
+	return static_cast<int>(sum + 0.5); // add 0.5 to solve accuracy problems
+}
+
+void printAllPaths(int** map, const int* permArr, int length)
+{
+	bool* checklist = new bool[length];
+	for (int i = 0; i < length; ++i)
+	{
+		checklist[i] = false;
+	}
+	int count = 1;
+	for (int i = 0; i < length; ++i)
+	{
+		if (checklist[i] == false)
+		{
+			std::cout << "path " << count << " is: ";
+			printPath(i, map, permArr, length);
+			std::cout << '\n';
+			++count;
+			for (int j = 0; j < lengthOfPath(i, permArr); ++j)
+			{
+				checklist[map[i][j]] = true;
+			}
+		}
+	}
+
+	delete[] checklist;
+}
+
 int main()
 {
-	//get array size from user (with input check)
 	int arraySize = getArraySize();
 	if (arraySize == -1)
 	{
 		exit(EXIT_FAILURE);
 	}
-
-	//alocate dynamic array
 	int *permutationArray = new int[arraySize];
-	
-	//get values for array
 	writeInputToArray(permutationArray, arraySize);
-	//input inspection of the array
 	if (!isPermutationLegal(permutationArray, arraySize))
 	{
 		delete[] permutationArray;
 		std::cerr << "Error";
 		exit(EXIT_FAILURE);
 	}
-	
-	//build path map
 	int** map = new int* [arraySize];
 	for (int i = 0; i < arraySize; ++i)
 	{
@@ -149,9 +177,7 @@ int main()
 	}
 	while (true)
 	{
-		//get number to check
 		int numCheck = getNumToFind();
-		//print path to number
 		if (numCheck <= -2 || numCheck >= arraySize)
 		{
 			std::cerr << "Error";
@@ -162,7 +188,9 @@ int main()
 		if (numCheck == -1)
 		{
 			//print -1 result, free all and exit
-			std::cout << "should print the -1 thing";
+			std::cout << "Total number of different paths is: ";
+			std::cout << getNumOfPaths(permutationArray, arraySize) <<'\n';
+			printAllPaths(map, permutationArray, arraySize);
 			freeMap(map, arraySize);
 			delete[] permutationArray;
 			exit(EXIT_SUCCESS);
