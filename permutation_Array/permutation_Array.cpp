@@ -14,6 +14,15 @@ int getArraySize()
 	return arrSize;
 }
 
+void writeInputToArray(int* arr, int length)
+{
+	std::cout << "Please enter the number to array: ";
+	for (int i = 0; i < length; ++i)
+	{
+		std::cin >> arr[i];
+	}
+}
+
 int main()
 {
 	//get array size from user (with input check)
@@ -22,8 +31,13 @@ int main()
 	{
 		exit(EXIT_FAILURE);
 	}
+
 	//alocate dynamic array
+	int *permutationArray = new int[arraySize];
+	
 	//get values for array (with input check)
+	writeInputToArray(permutationArray, arraySize);
+
 	//build actual array
 	//build road map
 	//get number to check
