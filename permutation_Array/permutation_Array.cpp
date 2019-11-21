@@ -20,7 +20,33 @@ void writeInputToArray(int* arr, int length)
 	for (int i = 0; i < length; ++i)
 	{
 		std::cin >> arr[i];
+		if (std::cin.fail())
+		{
+			delete[] arr;
+			std::cerr << "Error";
+			exit(EXIT_FAILURE);
+		}
 	}
+}
+
+bool isPermutationLegal(const int* arr, int length)
+{
+	for (int i = 0; i < length; ++i)
+	{
+		bool isFound = false;
+		for (int j = 0; j < length; ++j)
+		{
+			if (arr[j] == i)
+			{
+				isFound = true;
+			}
+		}
+		if (!isFound)
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 int lengthOfPath(int num, const int* arr)
@@ -107,6 +133,12 @@ int main()
 	//get values for array
 	writeInputToArray(permutationArray, arraySize);
 	//input inspection of the array
+	if (!isPermutationLegal(permutationArray, arraySize))
+	{
+		delete[] permutationArray;
+		std::cerr << "Error";
+		exit(EXIT_FAILURE);
+	}
 	
 	//build path map
 	int** map = new int* [arraySize];
