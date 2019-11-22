@@ -16,7 +16,7 @@ int main()
 	int** map = new int* [arraySize];
 	for (int i = 0; i < arraySize; ++i)
 	{
-		map[i] = new int[lengthOfPath(0, permutationArray)];
+		map[i] = new int[lengthOfPath(i, permutationArray)];
 		setPath(i, map[i], permutationArray);
 	}
 	while (true)
