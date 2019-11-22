@@ -1,5 +1,52 @@
 ﻿#include <iostream>
 #include <stdlib.h>
+#include "permutation_Array.h"
+
+int main()
+{
+	int arraySize = getArraySize();
+	if (arraySize == -1)
+	{
+		exit(EXIT_FAILURE);
+	}
+	int* permutationArray = new int[arraySize];
+	writeInputToArray(permutationArray, arraySize);
+	if (!isPermutationLegal(permutationArray, arraySize))
+	{
+		delete[] permutationArray;
+		std::cerr << "Error";
+		exit(EXIT_FAILURE);
+	}
+	int** map = new int* [arraySize];
+	for (int i = 0; i < arraySize; ++i)
+	{
+		map[i] = new int[lengthOfPath(0, permutationArray)];
+		setPath(i, map[i], permutationArray);
+	}
+	while (true)
+	{
+		int numCheck = getNumToFind();
+		if (numCheck <= -2 || numCheck >= arraySize)
+		{
+			std::cerr << "Error";
+			freeMap(map, arraySize);
+			delete[] permutationArray;
+			exit(EXIT_FAILURE);
+		}
+		if (numCheck == -1)
+		{
+			std::cout << "Total number of different paths is: ";
+			std::cout << getNumOfPaths(permutationArray, arraySize) << '\n';
+			printAllPaths(map, permutationArray, arraySize);
+			freeMap(map, arraySize);
+			delete[] permutationArray;
+			exit(EXIT_SUCCESS);
+		}
+		std::cout << "path to " << numCheck << " is: ";
+		printPath(numCheck, map, permutationArray, arraySize);
+		std::cout << '\n';
+	}
+}
 
 int getArraySize()
 {
@@ -154,49 +201,4 @@ void printAllPaths(int** map, const int* permArr, int length)
 	delete[] checklist;
 }
 
-int main()
-{
-	int arraySize = getArraySize();
-	if (arraySize == -1)
-	{
-		exit(EXIT_FAILURE);
-	}
-	int *permutationArray = new int[arraySize];
-	writeInputToArray(permutationArray, arraySize);
-	if (!isPermutationLegal(permutationArray, arraySize))
-	{
-		delete[] permutationArray;
-		std::cerr << "Error";
-		exit(EXIT_FAILURE);
-	}
-	int** map = new int* [arraySize];
-	for (int i = 0; i < arraySize; ++i)
-	{
-		map[i] = new int[lengthOfPath(0, permutationArray)];
-		setPath(i, map[i], permutationArray);
-	}
-	while (true)
-	{
-		int numCheck = getNumToFind();
-		if (numCheck <= -2 || numCheck >= arraySize)
-		{
-			std::cerr << "Error";
-			freeMap(map, arraySize);
-			delete[] permutationArray;
-			exit(EXIT_FAILURE);
-		}
-		if (numCheck == -1)
-		{
-			//print -1 result, free all and exit
-			std::cout << "Total number of different paths is: ";
-			std::cout << getNumOfPaths(permutationArray, arraySize) <<'\n';
-			printAllPaths(map, permutationArray, arraySize);
-			freeMap(map, arraySize);
-			delete[] permutationArray;
-			exit(EXIT_SUCCESS);
-		}
-		std::cout << "path to " << numCheck <<" is: ";
-		printPath(numCheck, map, permutationArray, arraySize);
-		std::cout << '\n';
-	}
-}
+
