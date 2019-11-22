@@ -5,10 +5,6 @@
 int main()
 {
 	int arraySize = getArraySize();
-	if (arraySize == -1)
-	{
-		exit(EXIT_FAILURE);
-	}
 	int* permutationArray = new int[arraySize];
 	writeInputToArray(permutationArray, arraySize);
 	if (!isPermutationLegal(permutationArray, arraySize))
@@ -56,14 +52,14 @@ int getArraySize()
 	if (arrSize <= 0)                        //any non-integer chars results in arrSize being 0
 	{
 		std::cerr << "Error";
-		return -1;
+		exit(EXIT_FAILURE);
 	}
 	return arrSize;
 }
 
 void writeInputToArray(int* arr, int length)
 {
-	std::cout << "Please enter the number to array: ";
+	std::cout << "Please enter the numbers to array: ";
 	for (int i = 0; i < length; ++i)
 	{
 		std::cin >> arr[i];
@@ -121,29 +117,6 @@ void setPath(int num, int* base, const int* arr)
 	base[count] = arr[index];
 }
 
-void printPath(int num, int** map, const int* permArr, int length)
-{
-	for (int j = 0; j < lengthOfPath(num, permArr); ++j)
-	{
-		std::cout << map[num][j] << " ";
-	}
-}
-
-// print function for debugging and inspecting
-void printMap(int** map, const int* permArr, int length)
-{
-	for (int i = 0; i < length; ++i)
-	{
-		std::cout << "Path of " << i << ": ";
-//		for (int j = 0; j < lengthOfPath(i, permArr); ++j)
-//		{
-//			std::cout << map[i][j] << " ";
-//		}
-		printPath(i, map, permArr, length);
-		std::cout << '\n';
-	}
-}
-
 int getNumToFind()
 {
 	std::cout << "please enter a number to find: ";
@@ -199,6 +172,29 @@ void printAllPaths(int** map, const int* permArr, int length)
 	}
 
 	delete[] checklist;
+}
+
+void printPath(int num, int** map, const int* permArr, int length)
+{
+	for (int j = 0; j < lengthOfPath(num, permArr); ++j)
+	{
+		std::cout << map[num][j] << " ";
+	}
+}
+
+// print function for debugging and inspecting
+void printMap(int** map, const int* permArr, int length)
+{
+	for (int i = 0; i < length; ++i)
+	{
+		std::cout << "Path of " << i << ": ";
+		//		for (int j = 0; j < lengthOfPath(i, permArr); ++j)
+		//		{
+		//			std::cout << map[i][j] << " ";
+		//		}
+		printPath(i, map, permArr, length);
+		std::cout << '\n';
+	}
 }
 
 
